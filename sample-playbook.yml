@@ -1,0 +1,8 @@
+---
+- hosts: all
+  sudo: yes
+  vars:
+    tutum_token: e27e8bea28434891806bf9d92c6771d0
+
+  roles:
+    - tutum-ansible-role

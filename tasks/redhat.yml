@@ -1,0 +1,18 @@
+---
+
+- name: RedHat OS installation  | Adding repo
+  template: src=redhat/tutum.repo dest=/etc/yum.repos.d/tutum.repo
+
+- name: RedHat OS installation | Importing GPG key
+  shell: rpm --import https://files.tutum.co/keys/A87A2270.pub
+
+- name: RedHat OS installation | Installing dependencies
+  yum: name=gpg,rpm,curl state=latest
+
+- name: RedHat OS installation | Installing agent
+  yum: name=tutum-agent state=latest
+  notify:
+    - Restart Tutum agent
+
+# run default tasks
+- include: every_os.yml

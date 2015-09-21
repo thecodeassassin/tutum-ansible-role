@@ -1,0 +1,7 @@
+[tutum]
+name=Tutum
+baseurl=http://{{ tutum_repo }}/redhat/\$basearch
+enabled=1
+gpgkey=https://files.tutum.co/keys/A87A2270.pub
+repo_gpgcheck=1
+gpgcheck=1

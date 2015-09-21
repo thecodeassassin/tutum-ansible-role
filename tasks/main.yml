@@ -1,0 +1,13 @@
+---
+
+- name: Main | Create Tutum config directory
+  file: path=/etc/tutum/agent/ state=directory mode=0755
+
+- name: Main | Tutum agent template
+  template: src=tutum-agent.conf.j2 dest=/etc/tutum/agent/tutum-agent.conf
+
+- include: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include: redhat.yml
+  when: ansible_os_family == 'RedHat'

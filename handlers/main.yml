@@ -1,0 +1,5 @@
+---
+- name: Restart Tutum agent
+  service:
+    name: tutum-agent
+    state: restarted

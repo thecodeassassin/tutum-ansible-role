@@ -1,0 +1,2 @@
+- name: General OS installation  | Retrieving gpg key
+  shell: curl -Ls --retry 30 --retry-delay 10 https://files.tutum.co/keys/A87A2270.pub | gpg --import -

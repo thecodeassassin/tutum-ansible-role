@@ -1,0 +1,20 @@
+
+- name: Debian OS installation | Adding repo
+  template: src=debian/tutum.repo dest=/etc/apt/sources.list.d/tutum.list
+
+- name: Debian OS installation | Importing GPG key
+  apt_key: state=present url=https://files.tutum.co/keys/A87A2270.pub validate_certs=no
+
+- name: Debian OS installation | Installing dependencies
+  apt: name=linux-image-extra-{{ ansible_kernel }}, curl update_cache=yes
+
+- name: Debian OS installation  | Retrieving gpg key
+  shell: curl -Ls --retry 30 --retry-delay 10 https://files.tutum.co/keys/A87A2270.pub | gpg --import -
+
+- name: Debian OS installation | Installing agent
+  apt: name=tutum-agent update_cache=yes
+  notify:
+    - Restart Tutum agent
+
+# run default tasks
+- include: every_os.yml
