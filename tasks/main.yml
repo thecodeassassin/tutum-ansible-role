@@ -1,13 +1,34 @@
 ---
 
+- name: Main  | Retrieving gpg key
+  shell: curl -Ls --retry 30 --retry-delay 10 {{ tutum_gpg_key }} | gpg --import -
+
 - name: Main | Create Tutum config directory
   file: path=/etc/tutum/agent/ state=directory mode=0755
-
-- name: Main | Tutum agent template
-  template: src=tutum-agent.conf.j2 dest=/etc/tutum/agent/tutum-agent.conf
 
 - include: debian.yml
   when: ansible_os_family == 'Debian'
 
 - include: redhat.yml
   when: ansible_os_family == 'RedHat'
+
+- name: Main | Requesting new node token from API
+  uri:
+    url: "{{ tutum_host ~ 'api/v1/token/' }}"
+    method: POST
+    HEADER_Authorization: "{{ tutum_api_header }}"
+    status_code: 201
+    body_format: json
+  register: token
+
+- name: Main | Parsing token
+  set_fact:
+    tutum_token: "{{ token.json.token }}"
+
+- name: Main | Setting tutum token
+  shell: tutum-agent set TutumToken={{ tutum_token }}
+
+- name: Main | Tutum agent template
+  template: src=tutum-agent.conf.j2 dest=/etc/tutum/agent/tutum-agent.conf
+  notify:
+    - Restart Tutum agent

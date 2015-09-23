@@ -1,18 +1,19 @@
 ---
 
-- name: RedHat OS installation  | Adding repo
+- name: RedHat/CentOS installation  | Adding repo
   template: src=redhat/tutum.repo dest=/etc/yum.repos.d/tutum.repo
 
-- name: RedHat OS installation | Importing GPG key
-  shell: rpm --import https://files.tutum.co/keys/A87A2270.pub
+- name: RedHat/CentOS installation | Importing GPG key
+  shell: rpm --import {{ tutum_gpg_key }}
 
-- name: RedHat OS installation | Installing dependencies
+- name: RedHat/CentOS installation | Installing dependencies
   yum: name=gpg,rpm,curl state=latest
 
-- name: RedHat OS installation | Installing agent
+- name: RedHat/CentOS installation | Installing agent
   yum: name=tutum-agent state=latest
-  notify:
-    - Restart Tutum agent
 
-# run default tasks
-- include: every_os.yml
+- name: RedHat/CentOS - Install pip
+  shell: "curl https://bootstrap.pypa.io/get-pip.py | python -"
+
+- name: RedHat/CentOS installation | Installing httplib2
+  pip: name=httplib2 state=latest

@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  author: Stephen "TheCodeAssassin" Hoogendijk
+  description: Install and configure the tutum.co agent for managing docker containers
+  license: MIT License
+  min_ansible_version: 1.9
+  platforms:
+    - name: EL
+      versions:
+        - 5
+        - 6
+        - 7
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - lenny
+        - squeeze
+        - wheezy
+  categories:
+    - cloud
+    - development
+dependencies: []
