@@ -6,14 +6,14 @@
 - name: RedHat/CentOS installation | Importing GPG key
   shell: rpm --import {{ tutum_gpg_key }}
 
+- name: RedHat/CentOS installation | Install EPEL
+  yum: name=epel-release state=latest
+
 - name: RedHat/CentOS installation | Installing dependencies
-  yum: name=gpg,rpm,curl state=latest
+  yum: name=gpg,rpm,curl,python-pip state=latest
 
 - name: RedHat/CentOS installation | Installing agent
   yum: name=tutum-agent state=latest
-
-- name: RedHat/CentOS - Install pip
-  shell: "curl https://bootstrap.pypa.io/get-pip.py | python -"
 
 - name: RedHat/CentOS installation | Installing httplib2
   pip: name=httplib2 state=latest
