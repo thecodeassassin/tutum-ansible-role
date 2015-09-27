@@ -21,11 +21,7 @@
 # we have to use curl instead of uri or get_url because of the json data
 - name: Request token | Adding tags to new tutum agent
   shell: "curl -H \"Content-Type: application/json\" -s -o /dev/null -w \"%{http_code}\"  -H \"Authorization: {{ tutum_api_header }}\" -X PATCH -d {{ tutum_tags|to_json|quote }} {{ tutum_host ~ 'api/v1/node/' ~ tutum_agent_uuid ~ '/' }}"
-  register: output
 
-
-- debug: var=node_status
-- debug: var=output
 
 # Does not work for some reason
 #- name: Main | Adding tags to new tutum agent
