@@ -33,6 +33,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Enable provisioning with Ansible.
   config.vm.provision "ansible" do |ansible|
+    #ansible.verbose = "vvv"
     ansible.playbook = "sample-playbook.yml"
   end
 

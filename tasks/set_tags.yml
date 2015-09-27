@@ -1,0 +1,38 @@
+---
+
+- name: Main | Extracting Tutum UUID
+  shell: cat /etc/tutum/agent/tutum-agent.conf | jq -r -c ".TutumUUID"
+  register: extract_result
+  until: extract_result.stdout != ""
+
+- name: Main | Parsing Tutum UUID
+  set_fact:
+    tutum_agent_uuid: "{{ extract_result.stdout }}"
+
+- name: Debug agent UUID
+  debug: msg="Agent UUID - {{ tutum_agent_uuid }}"
+
+- name: Main | Check node status
+  shell: "curl -H \"Content-Type: application/json\" -H \"Authorization: {{ tutum_api_header }}\" {{ tutum_host ~ 'api/v1/node/' ~ tutum_agent_uuid ~ '/' }}"
+  register: node_status
+  until: node_status.stdout.find('\"Deployed\"') != -1
+  retries: 10
+
+# we have to use curl instead of uri or get_url because of the json data
+- name: Request token | Adding tags to new tutum agent
+  shell: "curl -H \"Content-Type: application/json\" -s -o /dev/null -w \"%{http_code}\"  -H \"Authorization: {{ tutum_api_header }}\" -X PATCH -d {{ tutum_tags|to_json|quote }} {{ tutum_host ~ 'api/v1/node/' ~ tutum_agent_uuid ~ '/' }}"
+  register: output
+
+
+- debug: var=node_status
+- debug: var=output
+
+# Does not work for some reason
+#- name: Main | Adding tags to new tutum agent
+#  uri:
+#    url: "{{ tutum_host ~ ' api/v1/node/' ~ tutum_agent_uuid ~ '/' }}"
+#    method: PATCH
+#    HEADER_Authorization: "{{ tutum_api_header }}"
+#    HEADER_Content-Type: "application/json"
+#    status_code: 202
+#    body: "{{ tutum_tags|to_json|quote }}"

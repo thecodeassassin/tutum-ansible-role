@@ -13,6 +13,12 @@ in its private registry.
 
 Yes, it's free.
 
+### What Operating systems do you test?
+CentOS 7 and Ubuntu 14.04
+
+### Can i deploy a new node and automatically set tags
+Yes, you can! Just provide them to your playbook or in your inventory. (see sample below)
+
 ## Installation
 
 Add the role to your requirements.yml:
@@ -42,6 +48,12 @@ tutum_api_header: ApiKey thecodeassassin:1234567890abcdefghijklmnop
 
 Optional variables:
 ```
+# Node tags (deployment tags to be used for the node)
+tutum_tags:
+   - { "name": "web" }
+   - { "name": "redis" }
+   - { "name": "memcached" }
+   
 # Tutum repository
 tutum_repo: "repo.tutum.co"
 

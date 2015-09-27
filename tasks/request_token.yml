@@ -1,0 +1,15 @@
+---
+
+- name: Request token | Requesting new node token from API
+  shell: "curl -H \"Content-Type: application/json\" -H \"Authorization: {{ tutum_api_header }}\" -X POST {{ tutum_host ~ 'api/v1/token/' }}"
+  register: token
+
+- name: Request token  | Parsing token
+  set_fact:
+    tutum_token: "{{ (token.stdout|from_json).token }}"
+
+- name: Debug received token
+  debug: msg="Token recieved - {{ tutum_token }}"
+
+- name: Request token | Tutum agent template
+  template: src=tutum-agent.conf.j2 dest=/etc/tutum/agent/tutum-agent.conf force=no

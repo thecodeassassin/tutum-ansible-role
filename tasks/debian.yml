@@ -8,8 +8,14 @@
 - name: Debian OS installation | Installing dependencies #2
   apt: name=curl state=present
 
+- name: Debian OS installation | Installing dependencies #3
+  apt: name=jq state=present
+
 - name: Debian OS installation | Importing GPG key
   shell: curl -Ls --retry 30 --retry-delay 10 {{ tutum_gpg_key }} | apt-key add -
+
+# Request a token for the tutum agent
+- include: request_token.yml
 
 - name: Debian OS installation | Installing agent
   apt: name=tutum-agent update_cache=yes state=present
