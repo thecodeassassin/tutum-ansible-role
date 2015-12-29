@@ -1,0 +1,13 @@
+---
+- hosts: all
+  sudo: yes
+
+  vars:
+    tutum_tags:
+      tags:
+       - { "name": "web" }
+       - { "name": "redis" }
+       - { "name": "memcached" }
+
+  roles:
+    - { role: tutum-ansible-role, tutum_api_header: "ApiKey username:token" }

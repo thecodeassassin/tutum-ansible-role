@@ -1,0 +1,9 @@
+---
+- name: Debian OS installation | Installing dependencies #1
+  apt: name=linux-image-extra-{{ ansible_kernel }} update_cache=yes state=present
+
+- name: Debian OS installation | Installing dependencies #2
+  apt: name=curl state=present
+
+- name: Debian OS installation | Installing dependencies #3
+  apt: name=jq state=present

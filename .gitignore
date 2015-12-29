@@ -1,3 +1,4 @@
 .idea
 .vagrant
-sample-playbook.yml
+.do_token
+playbook.yml

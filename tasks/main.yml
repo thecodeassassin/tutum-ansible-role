@@ -1,22 +1,33 @@
 ---
+# start by installing the requirements if needed  
+- include: debian/requirements.yml
+  when: ansible_os_family == 'Debian'
+
+- include: redhat/requirements.yml
+  when: ansible_os_family == 'RedHat'
+
+# check the node status to determine if we need to install the agent
+- include: check_node_status.yml
 
 - name: Main  | Retrieving gpg key
   shell: curl -Ls --retry 30 --retry-delay 10 {{ tutum_gpg_key }} | gpg --import -
+  when: node_status == -1
 
 - name: Main | Create Tutum config directory
   file: path=/etc/tutum/agent/ state=directory mode=0755
+  when: node_status == -1
 
-- include: debian.yml
-  when: ansible_os_family == 'Debian'
+- include: debian/tutum.yml
+  when: ansible_os_family == 'Debian' and node_status == -1
 
-- include: redhat.yml
-  when: ansible_os_family == 'RedHat'
+- include: redhat/tutum.yml
+  when: ansible_os_family == 'RedHat' and node_status == -1
 
 - name: Main | Restart tutum agent
   service:
      name: tutum-agent
      state: restarted
 
-# set tags
+# set tags on the new tutum node
 - include: set_tags.yml
   when: tutum_tags is defined

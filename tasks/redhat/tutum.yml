@@ -1,0 +1,10 @@
+---
+
+- name: RedHat/CentOS installation  | Adding repo
+  template: src=redhat/tutum.repo dest=/etc/yum.repos.d/tutum.repo
+
+# Request a token for the tutum agent
+- include: ../request_token.yml
+
+- name: RedHat/CentOS installation | Installing agent
+  yum: name=tutum-agent state=latest

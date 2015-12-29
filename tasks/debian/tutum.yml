@@ -1,0 +1,13 @@
+---
+
+- name: Debian OS installation | Adding repo
+  template: src=debian/tutum.repo dest=/etc/apt/sources.list.d/tutum.list
+
+- name: Debian OS installation | Importing GPG key
+  shell: curl -Ls --retry 30 --retry-delay 10 {{ tutum_gpg_key }} | apt-key add -
+
+# Request a token for the tutum agent
+- include: ../request_token.yml
+
+- name: Debian OS installation | Installing agent
+  apt: name=tutum-agent update_cache=yes state=present
